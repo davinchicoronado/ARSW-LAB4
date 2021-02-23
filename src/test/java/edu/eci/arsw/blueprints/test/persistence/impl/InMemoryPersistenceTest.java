@@ -10,6 +10,7 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
+import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -65,10 +66,95 @@ public class InMemoryPersistenceTest {
         catch (BlueprintPersistenceException ex){
             
         }
-                
+
+    }
+    
+    @Test
+    public void getBpTest(){
+        BlueprintsServices bpServices = new BlueprintsServices();
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        bpServices.setBpp(ibpp);
+    
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+        
+        Point[] pts2=new Point[]{new Point(10, 10),new Point(20, 20)};
+        Blueprint bp2=new Blueprint("john", "thepaint2",pts2);
+        
+        
+        try {
+            bpServices.addNewBlueprint(bp);
+            bpServices.addNewBlueprint(bp2);
+
+        } catch (BlueprintPersistenceException ex) {
+            ex.getStackTrace();
+        }
+        
+        
+        try {
+            assertEquals("Blueprint{author=john, name=thepaint}",bpServices.getBlueprint("john","thepaint").toString());
+        }catch (BlueprintNotFoundException ex) {
+            ex.getStackTrace();
+        }
+
+    }
+    @Test
+    public void getBpByAuthorTest(){
+        BlueprintsServices bpServices = new BlueprintsServices();
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        bpServices.setBpp(ibpp);
+    
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+        
+        Point[] pts2=new Point[]{new Point(10, 10),new Point(20, 20)};
+        Blueprint bp2=new Blueprint("john", "thepaint2",pts2);
+        try {
+            bpServices.addNewBlueprint(bp);
+            bpServices.addNewBlueprint(bp2);
+
+        } catch (BlueprintPersistenceException ex) {
+            ex.getStackTrace();
+        }
+         try {
+             assertEquals("[Blueprint{author=john, name=thepaint}, Blueprint{author=john, name=thepaint2}]",bpServices.getBlueprintsByAuthor("john").toString());
+         }catch (BlueprintNotFoundException ex) {
+            ex.getStackTrace();
+        }
         
     }
+    
+    @Test
+    public void getAllBpTest(){
+        
+        BlueprintsServices bpServices = new BlueprintsServices();
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        bpServices.setBpp(ibpp);
+    
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+        
+        Point[] pts2=new Point[]{new Point(10, 10),new Point(20, 20)};
+        Blueprint bp2=new Blueprint("Peter", "thepaint2",pts2);
+        
+         try {
+            bpServices.addNewBlueprint(bp);
+            bpServices.addNewBlueprint(bp2);
+        } catch (BlueprintPersistenceException ex) {
+            ex.getStackTrace();
+        }
+        
+        try {
+            assertEquals("[Blueprint{author=_authorname_, name=_bpname_ }, Blueprint{author=Peter, name=thepaint2}, Blueprint{author=john, name=thepaint}]",bpServices.getAllBlueprints().toString());
+        } catch (BlueprintNotFoundException ex) {
+            ex.getStackTrace();
+        }
+    }
+     
+    
+        
+}
 
 
     
-}
+
