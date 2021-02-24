@@ -38,6 +38,41 @@ public class Point {
         this.y = y;
     }
     
+    /**
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Point other = (Point) obj;
+        if(other.getX()!=this.x || other.getY()!=this.y){
+            return false;
+        }
+        return true;
+    
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + this.x;
+        hash = 43 * hash + this.y;
+        return hash;
+    }
+    
+    @Override
+    public String toString() {
+        return "{"+ x + ","+ y + "}";
+    
+    }
+
     
     
 }
